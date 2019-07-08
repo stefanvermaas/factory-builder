@@ -1,36 +1,38 @@
 version: 2
+
+defaults: &defaults
+  working_directory: ~/repo
+  docker:
+    - image: circleci/node:10
+
 jobs:
   test:
-    working_directory: ~/src
-    docker:
-      - image: circleci/node:10
+    <<: *defaults
     steps:
       - checkout
       - restore_cache:
-          key: factory-builder-{{ .Branch }}-{{ checksum "yarn.lock" }}
+          key: v1-dependencies-{{ checksum "yarn.lock" }}
       - run:
           name: Install Dependencies
           command: yarn --no-progress --frozen-lockfile
       - save_cache:
-          key: factory-builder-{{ .Branch }}-{{ checksum "yarn.lock" }}
+          key: v1-dependencies-{{ checksum "yarn.lock" }}
           paths:
             - node_modules
       - run:
           name: Run Tests
           command: yarn test
   coverage:
-    working_directory: ~/src
-    docker:
-      - image: circleci/node:10
+    <<: *defaults
     steps:
       - checkout
       - restore_cache:
-          key: factory-builder-{{ .Branch }}-{{ checksum "yarn.lock" }}
+          key: v1-dependencies-{{ checksum "yarn.lock" }}
       - run:
           name: Install Dependencies
           command: yarn --no-progress --frozen-lockfile
       - save_cache:
-          key: factory-builder-{{ .Branch }}-{{ checksum "yarn.lock" }}
+          key: v1-dependencies-{{ checksum "yarn.lock" }}
           paths:
             - node_modules
       - run:
