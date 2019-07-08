@@ -1,9 +1,7 @@
-import { random, date } from 'faker';
-import { attributesFor } from './attributesFor';
-import { checkHookForReturnValue } from './utils';
+import { attributesFor, checkHookForReturnValue, randomNumber } from './utils';
 
-export const create = (factory, attributes = {}, skipHooks = false) => {
-  const factoryInstance = new factory();
+const create = (FactoryInstance, attributes = {}, skipHooks = false) => {
+  const factoryInstance = new FactoryInstance();
   const defaultAttributes = attributesFor(factoryInstance);
 
   // Let's start building this factory by merging the default attributes
@@ -21,9 +19,9 @@ export const create = (factory, attributes = {}, skipHooks = false) => {
   // Now, we're actually creating the factory by adding an ID and
   // the timestamps (createdAt and updatedAt) to the factory.
   factoryBuild = {
-    id: random.uuid(),
-    createdAt: date.past(),
-    updatedAt: date.recent(),
+    id: randomNumber,
+    createdAt: new Date(),
+    updatedAt: new Date(),
     ...factoryBuild,
   };
 
@@ -37,3 +35,5 @@ export const create = (factory, attributes = {}, skipHooks = false) => {
 
   return factoryBuild;
 };
+
+export default create;

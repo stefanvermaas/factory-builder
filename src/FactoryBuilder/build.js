@@ -1,8 +1,7 @@
-import { attributesFor } from './attributesFor';
-import { checkHookForReturnValue } from './utils';
+import { attributesFor, checkHookForReturnValue } from './utils';
 
-export const build = (factory, attributes = {}, skipHooks = false) => {
-  const factoryInstance = new factory();
+const build = (FactoryInstance, attributes = {}, skipHooks = false) => {
+  const factoryInstance = new FactoryInstance();
   const defaultAttributes = attributesFor(factoryInstance);
 
   // Let's start building this factory by merging the default attributes
@@ -33,3 +32,5 @@ export const build = (factory, attributes = {}, skipHooks = false) => {
 
   return factoryBuild;
 };
+
+export default build;
