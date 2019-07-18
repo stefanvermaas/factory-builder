@@ -17,6 +17,12 @@ const isObject = item => typeof item === 'object' && !Array.isArray(item) && ite
 
 export const attributesFor = factoryInstance => {
   if (factoryInstance.attributes) {
+    if (isObject(factoryInstance.attributes)) {
+      return factoryInstance.attributes;
+    }
+
+    // When the attributes are dynamic, evaluate the attributes
+    // and return the values of it.
     return factoryInstance.attributes();
   }
 
@@ -38,8 +44,36 @@ export const checkHookForReturnValue = (hookResult, hookName) => {
 
   throw new Error(
     `The ${hookName} needs to return the factory data otherwise ` +
-      "we can't proceed in building/creating the factory.",
+      `we can't proceed in building/creating the factory.`,
   );
+};
+
+/**
+ * The `checkForUnkownAttributes` method checks whether a developer is
+ * adding attributes to the factory that are not on the base factory. When
+ * this happens, we're raising an error message.
+ * @param {Object} factoryInstance - The instance of the factory
+ * @param {Object} attributes - The attributes that will be added to the factory
+ */
+
+export const checkForUnknownAttributes = (factoryInstance, attributes) => {
+  const factoryAttributes = Object.keys(attributesFor(factoryInstance));
+
+  // Find all the unknown attributes, so we can give the developer
+  // a sensible error message.
+  const unknownAttributes = Object.keys(attributes).filter(
+    attr => !factoryAttributes.includes(attr),
+  );
+
+  // When there are unknown attributes, we raise an error that tells
+  // the developer which attributes are added, that are not present on
+  // the factory itself.
+  if (unknownAttributes.length) {
+    throw new Error(
+      `"${unknownAttributes.join(', ')}" is/are not defined on the factory itself. ` +
+        `Please add these to the factory to be able to use them and clear this message.`,
+    );
+  }
 };
 
 /**

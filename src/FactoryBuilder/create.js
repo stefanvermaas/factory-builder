@@ -1,8 +1,16 @@
-import { attributesFor, checkHookForReturnValue, randomNumber } from './utils';
+import {
+  attributesFor,
+  checkHookForReturnValue,
+  checkForUnknownAttributes,
+  randomNumber,
+} from './utils';
 
 const create = (FactoryInstance, attributes = {}, skipHooks = false) => {
   const factoryInstance = new FactoryInstance();
   const defaultAttributes = attributesFor(factoryInstance);
+
+  // Check whether the given attributes are known to the instance
+  checkForUnknownAttributes(factoryInstance, attributes);
 
   // Let's start building this factory by merging the default attributes
   // of the factory with the given attributes that should override it
@@ -19,7 +27,7 @@ const create = (FactoryInstance, attributes = {}, skipHooks = false) => {
   // Now, we're actually creating the factory by adding an ID and
   // the timestamps (createdAt and updatedAt) to the factory.
   factoryBuild = {
-    id: randomNumber,
+    id: randomNumber(),
     createdAt: new Date(),
     updatedAt: new Date(),
     ...factoryBuild,

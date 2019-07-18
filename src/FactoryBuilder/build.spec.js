@@ -1,7 +1,7 @@
 import build from './build';
 
 const ExampleFactory = () => ({
-  attributes: () => ({ test: true }),
+  attributes: { test: true },
 });
 
 describe('build', () => {
@@ -14,10 +14,32 @@ describe('build', () => {
     const result = build(ExampleFactory, addedAttributes);
 
     expect(result.test).toEqual(addedAttributes.test);
-    expect(result).not.toEqual(new ExampleFactory().attributes());
+    expect(result).not.toEqual(new ExampleFactory().attributes);
   });
 
-  xit('adds warns in development when the attribute is not defined on the factory', () => {});
+  it('skips the hooks when skipHooks is true', () => {
+    const beforeBuildMock = jest.fn();
+    const afterBuildMock = jest.fn();
+
+    const ExampleFactoryWithHooks = () => ({
+      attributes: { test: true },
+      beforeBuild: beforeBuildMock,
+      afterBuild: afterBuildMock,
+    });
+
+    build(ExampleFactoryWithHooks, {}, true);
+    expect(beforeBuildMock).not.toHaveBeenCalled();
+    expect(afterBuildMock).not.toHaveBeenCalled();
+  });
+
+  it('throws an error when the attribute is not defined on the factory', () => {
+    const unknownAttributes = { unkown: false };
+    const errorMessage =
+      `"${Object.keys(unknownAttributes).join(', ')}" is/are not defined on the factory itself. ` +
+      `Please add these to the factory to be able to use them and clear this message.`;
+
+    expect(() => build(ExampleFactory, unknownAttributes)).toThrow(errorMessage);
+  });
 
   it('does not add an ID attribute', () => {
     const result = build(ExampleFactory);
@@ -39,7 +61,7 @@ describe('build', () => {
       const errorMessage = `The beforeBuild needs to return the factory data otherwise we can't proceed in building/creating the factory.`;
 
       const ExampleFactoryWithNoneReturningBeforeHook = () => ({
-        attributes: () => ({ test: true }),
+        attributes: { test: true },
         beforeBuild: jest.fn(),
       });
 
@@ -53,7 +75,7 @@ describe('build', () => {
       const beforeBuildMock = jest.fn();
 
       const ExampleFactoryWithBeforeHook = () => ({
-        attributes: () => defaultAttributes,
+        attributes: defaultAttributes,
         beforeBuild: beforeBuildMock.mockReturnValueOnce({ test: false }),
       });
 
@@ -64,7 +86,31 @@ describe('build', () => {
   });
 
   describe('afterBuild', () => {
-    xit('throws when no data is returned from the hook', () => {});
-    xit('calls the afterBuild method', () => {});
+    it('throws when no data is returned from the hook', () => {
+      const errorMessage = `The afterBuild needs to return the factory data otherwise we can't proceed in building/creating the factory.`;
+
+      const ExampleFactoryWithNoneReturningAfterHook = () => ({
+        attributes: { test: true },
+        afterBuild: jest.fn(),
+      });
+
+      expect(() => {
+        build(ExampleFactoryWithNoneReturningAfterHook);
+      }).toThrow(errorMessage);
+    });
+
+    it('calls the afterBuild method', () => {
+      const defaultAttributes = { test: false };
+      const afterBuildMock = jest.fn();
+
+      const ExampleFactoryWithAfterHook = () => ({
+        attributes: defaultAttributes,
+        afterBuild: afterBuildMock.mockReturnValueOnce({ test: true }),
+      });
+
+      build(ExampleFactoryWithAfterHook);
+      expect(afterBuildMock).toHaveBeenCalledTimes(1);
+      expect(afterBuildMock).toHaveBeenCalledWith(defaultAttributes);
+    });
   });
 });
