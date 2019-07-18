@@ -6,18 +6,16 @@ import { terser } from 'rollup-plugin-terser';
 import pkg from './package.json';
 
 export default {
-  input: './src/FactoryBuilder.js',
+  input: './index.js',
   output: [
     {
       file: `./dist/${pkg.name}.js`,
       format: 'cjs',
-      exports: 'named',
       sourcemap: true,
     },
     {
       file: `./dist/${pkg.name}.es.js`,
-      format: 'es',
-      exports: 'named',
+      format: 'esm',
       sourcemap: true,
     },
   ],

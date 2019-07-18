@@ -1,4 +1,4 @@
-import buildList from './buildList';
+import buildList from '../buildList';
 
 const ExampleFactory = () => ({
   attributes: () => ({ test: true }),

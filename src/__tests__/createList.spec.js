@@ -1,4 +1,4 @@
-import createList from './createList';
+import createList from '../createList';
 
 const ExampleFactory = () => ({
   attributes: () => ({ test: true }),

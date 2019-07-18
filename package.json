@@ -9,7 +9,7 @@
     "url": "git@github.com:stefanvermaas/factory-builder.git"
   },
   "homepage": "https://github.com/stefanvermaas/factory-builder",
-  "main": "dist/FactoryBuilder.js",
+  "main": "dist/factory-builder.js",
   "scripts": {
     "build": "rollup -c",
     "build:watch": "rollup -c -w",

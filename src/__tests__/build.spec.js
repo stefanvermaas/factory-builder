@@ -1,4 +1,4 @@
-import build from './build';
+import build from '../build';
 
 const ExampleFactory = () => ({
   attributes: { test: true },

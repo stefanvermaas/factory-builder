@@ -1,8 +1,8 @@
-import create from './FactoryBuilder/create';
-import createList from './FactoryBuilder/createList';
-import build from './FactoryBuilder/build';
-import buildList from './FactoryBuilder/buildList';
-import { attributesFor } from './FactoryBuilder/utils';
+import create from './create';
+import createList from './createList';
+import build from './build';
+import buildList from './buildList';
+import { attributesFor } from './utils';
 
 const FactoryBuilder = {
   create,

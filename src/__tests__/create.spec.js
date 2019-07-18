@@ -1,4 +1,4 @@
-import create from './create';
+import create from '../create';
 
 const ExampleFactory = () => ({
   attributes: { test: true },
