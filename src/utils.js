@@ -58,11 +58,14 @@ export const checkHookForReturnValue = (hookResult, hookName) => {
 
 export const checkForUnknownAttributes = (factoryInstance, attributes) => {
   const factoryAttributes = Object.keys(attributesFor(factoryInstance));
+  const whitelistedAttributes = ['id', 'createdAt', 'updatedAt'];
 
-  // Find all the unknown attributes, so we can give the developer
-  // a sensible error message.
+  // We check for none existing attributes, because we don't want to assign
+  // attributes that are not defined on the factory. We also check the
+  // whitelisted attributes to make sure the developer can set these when
+  // building or creating a new factory.
   const unknownAttributes = Object.keys(attributes).filter(
-    attr => !factoryAttributes.includes(attr),
+    key => !factoryAttributes.includes(key) && !whitelistedAttributes.includes(key),
   );
 
   // When there are unknown attributes, we raise an error that tells
