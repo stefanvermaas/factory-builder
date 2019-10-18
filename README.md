@@ -3,14 +3,14 @@
 Factory builder is a framework agnostic and scalable factory builder for your test suite.
 
 ## Table of Contents
-- [The Problem]()
-- [The Solution]()
-- [Installation]()
-- [Examples]()
-- [Issues]()
-  - [🐛 Bugs]()
-  - [💡 Feature Requests]()
-  - [❓ Questions]()
+- [The Problem](https://github.com/stefanvermaas/factory-builder/tree/5-improve-documentation#the-problem)
+- [The Solution](https://github.com/stefanvermaas/factory-builder/tree/5-improve-documentation#the-solution)
+- [Installation](https://github.com/stefanvermaas/factory-builder/tree/5-improve-documentation#installation)
+- [Examples](https://github.com/stefanvermaas/factory-builder/tree/5-improve-documentation#examples)
+- [Issues](https://github.com/stefanvermaas/factory-builder/tree/5-improve-documentation#issues)
+  - [🐛 Bugs](https://github.com/stefanvermaas/factory-builder/tree/5-improve-documentation#-bugs)
+  - [💡 Feature Requests](https://github.com/stefanvermaas/factory-builder/tree/5-improve-documentation#-feature-requests)
+  - [❓ Questions](https://github.com/stefanvermaas/factory-builder/tree/5-improve-documentation#-questions)
 
 ## The Problem
 
