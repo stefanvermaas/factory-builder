@@ -1,6 +1,20 @@
-import { checkForUnknownAttributes } from '../utils';
+import { attributesFor, checkForUnknownAttributes } from '../utils';
 
 describe('utilities', () => {
+  describe('attributesFor', () => {
+    const Factory = () => ({
+      attributes: { some: 'key' },
+    });
+
+    it('does not raise an exception when the factory is passed without instanciating it', () => {
+      expect(() => attributesFor(Factory)).not.toThrow();
+    });
+
+    it('does not raise an exception when the factory instance is passed', () => {
+      expect(() => attributesFor(new Factory())).not.toThrow();
+    });
+  });
+
   describe('checkForUnknownAttributes', () => {
     const UnknownAttributesFactory = () => ({
       attributes: { some: 'key' },

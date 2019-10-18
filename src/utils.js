@@ -1,21 +1,37 @@
 /**
- * The `isObject` method checks whether a given item is a real
- * object or not.
- * @param {Object} item - The object we want to check
- * @returns {Boolean} - The result of the check
+ * The `isObject` is an internal method that checks whether a given item is a
+ * real object or not.
+ * @param {Object} item - The object we want to check for being an object
+ * @returns {Boolean} - The result of the check for an object
  */
 
 const isObject = item => typeof item === 'object' && !Array.isArray(item) && item !== null;
 
 /**
+ * The `isFunction` is an internal method to verify whether the passed item is
+ * a function or not.
+ * @param {Object} item - The object we want to check for being a function
+ * @returns {Boolean} - The result of the check for a function
+ */
+
+const isFunction = item => !!(item && item.constructor && item.call && item.apply);
+
+/**
  * The `attributesFor` is a helper method that retrieves the attributes
  * from a factory instance. If none are found, it raises a helpful error
  * message.
- * @param {Object} factoryInstance - The instance of a factory
+ * @param {Object|Function} Factory - The factory or an instance of the factory
  * @returns {Object} - The attributes of the factory
  */
 
-export const attributesFor = factoryInstance => {
+export const attributesFor = Factory => {
+  // It's possible to pass a instance that is not initiate yet to this method
+  // too. The internal methods will instanciate the, but when you use it directly
+  // it's also possible to use the uninstanciated variant directly.
+  const factoryInstance = isFunction(Factory) ? new Factory() : Factory;
+
+  // Now we will check whether the factory has implemented the `attributes` key
+  // or function. When that is not the case, we will ask the developer to implement this.
   if (factoryInstance.attributes) {
     if (isObject(factoryInstance.attributes)) {
       return factoryInstance.attributes;
@@ -28,7 +44,7 @@ export const attributesFor = factoryInstance => {
 
   throw new Error(
     'Every factory needs some sensible defaults. So please implement the ' +
-      'defaultAttributes() method on the factory yourself.',
+      'attributes method/key on the factory yourself.',
   );
 };
 
