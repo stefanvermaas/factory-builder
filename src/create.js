@@ -7,13 +7,13 @@ import {
 
 const create = (FactoryInstance, attributes = {}, skipHooks = false) => {
   const factoryInstance = new FactoryInstance();
-  const defaultAttributes = attributesFor(factoryInstance);
 
   // Check whether the given attributes are known to the instance
   checkForUnknownAttributes(factoryInstance, attributes);
 
   // Let's start building this factory by merging the default attributes
   // of the factory with the given attributes that should override it
+  const defaultAttributes = attributesFor(factoryInstance);
   let factoryBuild = { ...defaultAttributes, ...attributes };
 
   // Before we start creating the factory, we want to give the developer
@@ -26,10 +26,11 @@ const create = (FactoryInstance, attributes = {}, skipHooks = false) => {
 
   // Now, we're actually creating the factory by adding an ID and
   // the timestamps (createdAt and updatedAt) to the factory.
+  const timestamp = new Date();
   factoryBuild = {
     id: randomNumber(),
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    createdAt: timestamp,
+    updatedAt: timestamp,
     ...factoryBuild,
   };
 
