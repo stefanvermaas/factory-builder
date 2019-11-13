@@ -9,7 +9,9 @@
     "fixtures",
     "factories",
     "fixtures-replacement",
-    "factory-builder"
+    "factory-builder",
+    "BDD",
+    "TDD"
   ],
   "license": "MIT",
   "repository": {
