@@ -3,6 +3,14 @@
   "version": "1.0.4",
   "description": "An easy way to create framework agnostic scalable test factories",
   "author": "Stefan Vermaas",
+  "keywords": [
+    "testing",
+    "testing-tools",
+    "fixtures",
+    "factories",
+    "fixtures-replacement",
+    "factory-builder"
+  ],
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -41,6 +49,5 @@
     "rollup-plugin-commonjs": "^10.0.0",
     "rollup-plugin-node-resolve": "^5.0.1",
     "rollup-plugin-terser": "^5.0.0"
-  },
-  "keywords": []
+  }
 }
