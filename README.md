@@ -25,6 +25,144 @@ yarn add --dev factory-builder
 
 ## Examples
 
+### Defining factories
+Each factory has a name and a set of attributes. It is highly recommended that you have one factory for each class that provides the simplest set of attributes necessary to create an instance of that class.
+
+Note that the factory should always return an `Object` with the `attributes` key. The value of this `attributes` key can either be a function that returns an `Object` or an `Object`.
+
+```js
+// ./factories/User.js
+export default function User() {
+  return {
+    attributes: {
+      firstName: 'Thom',
+      lastName: 'Taylor',
+      email: 'example@example.org',
+    };
+  }
+}
+```
+
+### Consuming factories
+On it's own there is nothing special about factories. They're just plain javascript functions that return a specifically styled object. To actually use the factory in your test you can make use of three methods that are provided by Factory Buider; `create`, `build` or `attributesFor`.
+
+### Create or building a new factory
+Factory Builder doesn't depend on any database, which makes it easy to quickly run your entire test suite. The `create` method mimicks the create action on a database level. It will create a new factory and it will assign it the `id`, `createdAt` and `updatedAt` properties. The `build` simple creates a new factory, but without the `id`, `createdAt` and `updatedAt` properties.
+
+```js
+// ./specs/User.js
+import { create, build } from 'factory-builder';
+import User from './factories/User';
+
+describe('User', () => {
+  it('creates a new user', () => {
+    const user = create(User, { lastName: 'created' });
+    expect(user.lastName).toEqual('created');
+    expect(user.id).not.toBeUndefined();
+  });
+
+  it('builds a new user', () => {
+    const user = build(User, { lastName: 'build' });
+    expect(user.lastName).toEqual('build');
+    expect(user.id).toBeUndefined();
+  });
+});
+```
+
+### Quickly grab the attributes
+Want to quickly get all the attributes for a factory (for example to use it as POST data in your tests), you can use the `attributesFor` method. This will return an object with all the attributes of a factory.
+
+```js
+// ./specs/User.js
+import { attributesFor } from 'factory-builder';
+import User from './factories/User';
+
+describe('User', () => {
+  it('sends an API request', () => {
+    const userData = attributesFor(User, { lastName: 'Moses' });
+
+    const response = FakeApi('/some-url', {
+      method: 'POST',
+      body: JSON.stringify(userData),
+    });
+
+    expect(response.lastName).toEqual('Moses');
+  });
+});
+```
+
+### Creating or building multiple factories
+You can also create multiple factories at the same time. For this you can use the `createList` or the `buildList` functions that the Factory Builder package provides.
+
+```js
+// ./specs/User.js
+import { createList, buildList } from 'factory-builder';
+import User from './factories/User';
+
+describe('User', () => {
+  it('creates 5 new users', () => {
+    const users = createList(User, 5, { lastName: 'created' });
+    expect(users.length).toEqual(5);
+  });
+
+  it('builds 2 new users', () => {
+    const users = buildList(User, 2, { lastName: 'build' });
+    expect(users.length).toEqual(2);
+  });
+});
+```
+
+### Before and After hooks
+It's also possible to use one of the hooks that Factory Builder provides for injecting some code;
+- `beforeCreate` - called before creating a factory
+- `afterCreate` - called right after setting the `id`, `createdAt` and `updatedAt` attributes
+- `beforeBuild` - called before building a factory
+- `afterBuild` - called after building the factory
+
+These methods can be globally defined on your factory or can be passed to the `create` or `build` methods. These hooks enable you to modify or use create data to do whatever you want. The `before*` and `after*` methods should always return an `Object` and they always have one argument; the attributes of the factory.
+
+```js
+// ./factories/User.js
+function User() {
+  return {
+    attributes: {
+      firstName: 'Peter',
+    },
+
+    beforeCreate: (attributes) => {
+      return {
+        ...attributes,
+        lastName: 'Pong',
+      };
+    },
+
+    afterCreate: (attributes) => {
+      return {
+        ...attributes,
+        email: `email-${attributes.id}@email.org`,
+      };
+    },
+
+    beforeBuild: (attributes) => {
+      return {
+        ...attributes,
+        lastName: `${attributes.firstName}s`,
+      };
+    },
+
+    afterBuild: (attributes) => {
+      return {
+        ...attributes,
+        email: `${attributes.firstName}@email.org`,
+      };
+    },
+  }
+}
+```
+
+### Generating data
+Note: You could use a third party library like [fakerjs](https://github.com/marak/Faker.js/) to create fake data for your factories or just define it yourself.
+
 ## Issues
 _Looking to contribute? Look for the [Good First Issue](https://github.com/stefanvermaas/factory-builder/issues?utf8=✓&q=is%3Aissue+is%3Aopen+sort%3Areactions-%2B1-desc+label%3A"good+first+issue"+) label._
 
