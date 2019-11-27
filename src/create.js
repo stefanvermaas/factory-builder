@@ -1,20 +1,18 @@
-import {
-  attributesFor,
-  checkHookForReturnValue,
-  checkForUnknownAttributes,
-  randomNumber,
-} from './utils';
+import { checkHookForReturnValue, randomNumber } from './utils';
+import build from './build';
 
-const create = (FactoryInstance, attributes = {}, skipHooks = false) => {
+const create = (FactoryInstance, parameters = {}) => {
+  const { skipHooks, ...attributes } = parameters;
+
+  // Create a new instance for the factory
   const factoryInstance = new FactoryInstance();
 
-  // Check whether the given attributes are known to the instance
-  checkForUnknownAttributes(factoryInstance, attributes);
+  // Get the base attributes for the factory by building the factory and skip the
+  // hooks for the build method. This way we can re-use the code of the `build` method.
+  const baseAttributes = build(FactoryInstance, { ...parameters, skipHooks: true });
 
-  // Let's start building this factory by merging the default attributes
-  // of the factory with the given attributes that should override it
-  const defaultAttributes = attributesFor(factoryInstance);
-  let factoryBuild = { ...defaultAttributes, ...attributes };
+  // Create a new factory build we can continue building on
+  let factoryBuild = { ...baseAttributes, ...attributes };
 
   // Before we start creating the factory, we want to give the developer
   // some extra options to modify the data as they wish. This is the place

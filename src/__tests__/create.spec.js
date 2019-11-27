@@ -41,7 +41,7 @@ describe('create', () => {
       afterCreate: afterCreateMock,
     });
 
-    create(ExampleFactoryWithHooks, {}, true);
+    create(ExampleFactoryWithHooks, { skipHooks: true });
     expect(beforeCreateMock).not.toHaveBeenCalled();
     expect(afterCreateMock).not.toHaveBeenCalled();
   });
@@ -108,6 +108,22 @@ describe('create', () => {
 
       create(ExampleFactoryWithAfterHook);
       expect(afterCreateMock).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('variants', () => {
+    const FactoryWithVariants = () => ({
+      attributes: { isAdmin: false },
+      variants: {
+        admin: {
+          isAdmin: true,
+        },
+      },
+    });
+
+    it('returns the variant when defined', () => {
+      const factory = create(FactoryWithVariants, { as: 'admin' });
+      expect(factory.isAdmin).toEqual(true);
     });
   });
 });

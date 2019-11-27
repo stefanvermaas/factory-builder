@@ -21,10 +21,11 @@ const isFunction = item => !!(item && item.constructor && item.call && item.appl
  * from a factory instance. If none are found, it raises a helpful error
  * message.
  * @param {Object|Function} Factory - The factory or an instance of the factory
+ * @param {String} - The variant for a factory
  * @returns {Object} - The attributes of the factory
  */
 
-export const attributesFor = Factory => {
+export const attributesFor = (Factory, as = undefined) => {
   // It's possible to pass a instance that is not initiate yet to this method
   // too. The internal methods will instanciate the, but when you use it directly
   // it's also possible to use the uninstanciated variant directly.
@@ -33,13 +34,16 @@ export const attributesFor = Factory => {
   // Now we will check whether the factory has implemented the `attributes` key
   // or function. When that is not the case, we will ask the developer to implement this.
   if (factoryInstance.attributes) {
-    if (isObject(factoryInstance.attributes)) {
-      return factoryInstance.attributes;
-    }
+    // Get the base attributes for the factory. After this we can check for the variant.
+    const baseAttributes = isObject(factoryInstance.attributes)
+      ? factoryInstance.attributes
+      : factoryInstance.attributes();
 
-    // When the attributes are dynamic, evaluate the attributes
-    // and return the values of it.
-    return factoryInstance.attributes();
+    // When the `as` param is undefined, we just return the base attributes. When
+    // the `as` param is defined, we want to merge the base attributes with the
+    // attributes of the variant.
+    if (!as) return baseAttributes;
+    return { baseAttributes, ...factoryInstance.variants[as] };
   }
 
   throw new Error(
