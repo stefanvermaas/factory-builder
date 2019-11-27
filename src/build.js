@@ -3,6 +3,7 @@ import {
   checkHookForReturnValue,
   checkForUnknownAttributes,
   isObject,
+  checkHookForFunction,
 } from './utils';
 
 const build = (factory, parameters = {}) => {
@@ -29,6 +30,7 @@ const build = (factory, parameters = {}) => {
   // some extra options to modify the data as they wish. This is the place
   // where they can still add data to the factory.
   if (factory.beforeBuild && !skipHooks) {
+    checkHookForFunction(factory, 'beforeBuild');
     factoryBuild = factory.beforeBuild(factoryBuild);
     checkHookForReturnValue(factoryBuild, 'beforeBuild');
   }
@@ -43,6 +45,7 @@ const build = (factory, parameters = {}) => {
   // the developer so they can use the newly build data and maybe
   // add some extra's here.
   if (factory.afterBuild && !skipHooks) {
+    checkHookForFunction(factory, 'afterBuild');
     factoryBuild = factory.afterBuild(factoryBuild);
     checkHookForReturnValue(factoryBuild, 'afterBuild');
   }
