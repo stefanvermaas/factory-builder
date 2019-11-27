@@ -160,6 +160,39 @@ function User() {
 }
 ```
 
+### Using variants
+Variants enable you to define multiple variants of the same base factory. You can
+use the `as` key when you create or build a factory and it will return the variant
+you've defined.
+
+```js
+function User() {
+  return {
+    attributes: {
+      firstName: 'Peter',
+      isClient: false,
+      isAdmin: false,
+    },
+    variants: {
+      admin: {
+        isClient: false,
+        isAdmin: true,
+      },
+      client: {
+        isClient: true,
+      }
+    }
+  }
+}
+
+import { create } from 'factory-builder';
+create(User, as: 'admin'); // => { firstName: 'Peter', isClient: false, isAdmin: true };
+```
+
+NOTE: The variant must be a plain object and should be namespaced in your factory
+under `variants`. The key name will also be the way you pick this specific factory
+variant.
+
 ### Generating data
 Note: You could use a third party library like [fakerjs](https://github.com/marak/Faker.js/) to create fake data for your factories or just define it yourself.
 

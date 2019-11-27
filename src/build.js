@@ -1,6 +1,9 @@
 import { attributesFor, checkHookForReturnValue, checkForUnknownAttributes } from './utils';
 
-const build = (FactoryInstance, attributes = {}, skipHooks = false) => {
+const build = (FactoryInstance, parameters = {}) => {
+  const { as, skipHooks, ...attributes } = parameters;
+
+  // Create a new instance for the factory
   const factoryInstance = new FactoryInstance();
 
   // Check whether the given attributes are known to the instance
@@ -8,8 +11,8 @@ const build = (FactoryInstance, attributes = {}, skipHooks = false) => {
 
   // Let's start building this factory by merging the default attributes
   // of the factory with the given attributes that should override it
-  const defaultAttributes = attributesFor(factoryInstance);
-  let factoryBuild = { ...defaultAttributes, ...attributes };
+  const baseAttributes = attributesFor(factoryInstance, as);
+  let factoryBuild = { ...baseAttributes, ...attributes };
 
   // Before we start building the factory, we want to give the developer
   // some extra options to modify the data as they wish. This is the place
