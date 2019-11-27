@@ -1,15 +1,12 @@
 import { checkHookForReturnValue, randomNumber } from './utils';
 import build from './build';
 
-const create = (FactoryInstance, parameters = {}) => {
+const create = (factory, parameters = {}) => {
   const { skipHooks, ...attributes } = parameters;
-
-  // Create a new instance for the factory
-  const factoryInstance = new FactoryInstance();
 
   // Get the base attributes for the factory by building the factory and skip the
   // hooks for the build method. This way we can re-use the code of the `build` method.
-  const baseAttributes = build(FactoryInstance, { ...parameters, skipHooks: true });
+  const baseAttributes = build(factory, { ...parameters, skipHooks: true });
 
   // Create a new factory build we can continue building on
   let factoryBuild = { ...baseAttributes, ...attributes };
@@ -17,8 +14,8 @@ const create = (FactoryInstance, parameters = {}) => {
   // Before we start creating the factory, we want to give the developer
   // some extra options to modify the data as they wish. This is the place
   // where they can still add data to the factory.
-  if (factoryInstance.beforeCreate && !skipHooks) {
-    factoryBuild = factoryInstance.beforeCreate(factoryBuild);
+  if (factory.beforeCreate && !skipHooks) {
+    factoryBuild = factory.beforeCreate(factoryBuild);
     checkHookForReturnValue(factoryBuild, 'beforeCreate');
   }
 
@@ -35,8 +32,8 @@ const create = (FactoryInstance, parameters = {}) => {
   // Just before we return it, we want to pass the data back to
   // the developer so they can use the newly created data and maybe
   // add some extra's here.
-  if (factoryInstance.afterCreate && !skipHooks) {
-    factoryBuild = factoryInstance.afterCreate(factoryBuild);
+  if (factory.afterCreate && !skipHooks) {
+    factoryBuild = factory.afterCreate(factoryBuild);
     checkHookForReturnValue(factoryBuild, 'afterCreate');
   }
 
