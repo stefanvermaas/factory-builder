@@ -1,8 +1,8 @@
 import create from '../create';
 
-const ExampleFactory = () => ({
+const ExampleFactory = {
   attributes: { test: true },
-});
+};
 
 describe('create', () => {
   it('creates an factory without throwing an exception', () => {
@@ -25,7 +25,7 @@ describe('create', () => {
   });
 
   it('is possible to set the attributes', () => {
-    const defaultAttributes = ExampleFactory().attributes;
+    const defaultAttributes = ExampleFactory.attributes;
 
     const result = create(ExampleFactory, { test: !defaultAttributes.test });
     expect(result.test).not.toEqual(defaultAttributes.test);
@@ -35,11 +35,11 @@ describe('create', () => {
     const beforeCreateMock = jest.fn();
     const afterCreateMock = jest.fn();
 
-    const ExampleFactoryWithHooks = () => ({
+    const ExampleFactoryWithHooks = {
       attributes: { test: true },
       beforeCreate: beforeCreateMock,
       afterCreate: afterCreateMock,
-    });
+    };
 
     create(ExampleFactoryWithHooks, { skipHooks: true });
     expect(beforeCreateMock).not.toHaveBeenCalled();
@@ -59,10 +59,10 @@ describe('create', () => {
     it('throws when no data is returned from the hook', () => {
       const errorMessage = `The beforeCreate needs to return the factory data otherwise we can't proceed in building/creating the factory.`;
 
-      const ExampleFactoryWithNoneReturningBeforeHook = () => ({
+      const ExampleFactoryWithNoneReturningBeforeHook = {
         attributes: { test: true },
         beforeCreate: jest.fn(),
-      });
+      };
 
       expect(() => {
         create(ExampleFactoryWithNoneReturningBeforeHook);
@@ -73,10 +73,10 @@ describe('create', () => {
       const defaultAttributes = { test: false };
       const beforeCreateMock = jest.fn();
 
-      const ExampleFactoryWithBeforeHook = () => ({
+      const ExampleFactoryWithBeforeHook = {
         attributes: defaultAttributes,
         beforeCreate: beforeCreateMock.mockReturnValueOnce({ test: false }),
-      });
+      };
 
       create(ExampleFactoryWithBeforeHook);
       expect(beforeCreateMock).toHaveBeenCalledTimes(1);
@@ -87,10 +87,10 @@ describe('create', () => {
     it('throws when no data is returned from the hook', () => {
       const errorMessage = `The afterCreate needs to return the factory data otherwise we can't proceed in building/creating the factory.`;
 
-      const ExampleFactoryWithNoneReturningAfterHook = () => ({
+      const ExampleFactoryWithNoneReturningAfterHook = {
         attributes: { test: true },
         afterCreate: jest.fn(),
-      });
+      };
 
       expect(() => {
         create(ExampleFactoryWithNoneReturningAfterHook);
@@ -101,10 +101,10 @@ describe('create', () => {
       const defaultAttributes = { test: false };
       const afterCreateMock = jest.fn();
 
-      const ExampleFactoryWithAfterHook = () => ({
+      const ExampleFactoryWithAfterHook = {
         attributes: defaultAttributes,
         afterCreate: afterCreateMock.mockReturnValueOnce({ test: true }),
-      });
+      };
 
       create(ExampleFactoryWithAfterHook);
       expect(afterCreateMock).toHaveBeenCalledTimes(1);
@@ -112,14 +112,14 @@ describe('create', () => {
   });
 
   describe('variants', () => {
-    const FactoryWithVariants = () => ({
+    const FactoryWithVariants = {
       attributes: { isAdmin: false },
       variants: {
         admin: {
           isAdmin: true,
         },
       },
-    });
+    };
 
     it('returns the variant when defined', () => {
       const factory = create(FactoryWithVariants, { as: 'admin' });

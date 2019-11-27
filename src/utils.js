@@ -5,7 +5,7 @@
  * @returns {Boolean} - The result of the check for an object
  */
 
-const isObject = item => typeof item === 'object' && !Array.isArray(item) && item !== null;
+export const isObject = item => typeof item === 'object' && !Array.isArray(item) && item !== null;
 
 /**
  * The `isFunction` is an internal method to verify whether the passed item is
@@ -72,12 +72,12 @@ export const checkHookForReturnValue = (hookResult, hookName) => {
  * The `checkForUnkownAttributes` method checks whether a developer is
  * adding attributes to the factory that are not on the base factory. When
  * this happens, we're raising an error message.
- * @param {Object} factoryInstance - The instance of the factory
+ * @param {Object} factory - The instance of the factory
  * @param {Object} attributes - The attributes that will be added to the factory
  */
 
-export const checkForUnknownAttributes = (factoryInstance, attributes) => {
-  const factoryAttributes = Object.keys(attributesFor(factoryInstance));
+export const checkForUnknownAttributes = (factory, attributes) => {
+  const factoryAttributes = Object.keys(attributesFor(factory));
   const whitelistedAttributes = ['id', 'createdAt', 'updatedAt'];
 
   // We check for none existing attributes, because we don't want to assign

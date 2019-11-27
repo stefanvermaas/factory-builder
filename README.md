@@ -28,23 +28,23 @@ yarn add --dev factory-builder
 ### Defining factories
 Each factory has a name and a set of attributes. It is highly recommended that you have one factory for each class that provides the simplest set of attributes necessary to create an instance of that class.
 
-Note that the factory should always return an `Object` with the `attributes` key. The value of this `attributes` key can either be a function that returns an `Object` or an `Object`.
+Note that the factory is an `Object` with the `attributes` key. The value of this `attributes` key can either be a function that returns an `Object` or an `Object`.
 
 ```js
 // ./factories/User.js
-export default function User() {
-  return {
-    attributes: {
-      firstName: 'Thom',
-      lastName: 'Taylor',
-      email: 'example@example.org',
-    };
+const User = {
+  attributes: {
+    firstName: 'Thom',
+    lastName: 'Taylor',
+    email: 'example@example.org',
   }
 }
+
+export default User;
 ```
 
 ### Consuming factories
-On it's own there is nothing special about factories. They're just plain javascript functions that return a specifically styled object. To actually use the factory in your test you can make use of three methods that are provided by Factory Buider; `create`, `build` or `attributesFor`.
+On it's own there is nothing special about factories. They're just plain javascript object that return a specifically styled object. To actually use the factory in your test you can make use of three methods that are provided by Factory Buider; `create`, `build` or `attributesFor`.
 
 ### Create or building a new factory
 Factory Builder doesn't depend on any database, which makes it easy to quickly run your entire test suite. The `create` method mimicks the create action on a database level. It will create a new factory and it will assign it the `id`, `createdAt` and `updatedAt` properties. The `build` simple creates a new factory, but without the `id`, `createdAt` and `updatedAt` properties.
@@ -123,41 +123,41 @@ These methods can be globally defined on your factory or can be passed to the `c
 
 ```js
 // ./factories/User.js
-function User() {
-  return {
-    attributes: {
-      firstName: 'Peter',
-    },
+const User = {
+  attributes: {
+    firstName: 'Peter',
+  },
 
-    beforeCreate: (attributes) => {
-      return {
-        ...attributes,
-        lastName: 'Pong',
-      };
-    },
+  beforeCreate: (attributes) => {
+    return {
+      ...attributes,
+      lastName: 'Pong',
+    };
+  },
 
-    afterCreate: (attributes) => {
-      return {
-        ...attributes,
-        email: `email-${attributes.id}@email.org`,
-      };
-    },
+  afterCreate: (attributes) => {
+    return {
+      ...attributes,
+      email: `email-${attributes.id}@email.org`,
+    };
+  },
 
-    beforeBuild: (attributes) => {
-      return {
-        ...attributes,
-        lastName: `${attributes.firstName}s`,
-      };
-    },
+  beforeBuild: (attributes) => {
+    return {
+      ...attributes,
+      lastName: `${attributes.firstName}s`,
+    };
+  },
 
-    afterBuild: (attributes) => {
-      return {
-        ...attributes,
-        email: `${attributes.firstName}@email.org`,
-      };
-    },
-  }
-}
+  afterBuild: (attributes) => {
+    return {
+      ...attributes,
+      email: `${attributes.firstName}@email.org`,
+    };
+  },
+};
+
+export default User;
 ```
 
 ### Using variants
@@ -166,24 +166,22 @@ use the `as` key when you create or build a factory and it will return the varia
 you've defined.
 
 ```js
-function User() {
-  return {
-    attributes: {
-      firstName: 'Peter',
+const User = {
+  attributes: {
+    firstName: 'Peter',
+    isClient: false,
+    isAdmin: false,
+  },
+  variants: {
+    admin: {
       isClient: false,
-      isAdmin: false,
+      isAdmin: true,
     },
-    variants: {
-      admin: {
-        isClient: false,
-        isAdmin: true,
-      },
-      client: {
-        isClient: true,
-      }
+    client: {
+      isClient: true,
     }
   }
-}
+};
 
 import { create } from 'factory-builder';
 create(User, as: 'admin'); // => { firstName: 'Peter', isClient: false, isAdmin: true };
