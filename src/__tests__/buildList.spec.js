@@ -1,8 +1,8 @@
 import buildList from '../buildList';
 
-const ExampleFactory = () => ({
+const ExampleFactory = {
   attributes: () => ({ test: true }),
-});
+};
 
 describe('buildList', () => {
   const numberOfFactories = 5;
