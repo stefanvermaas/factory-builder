@@ -1,4 +1,4 @@
-import { checkHookForReturnValue, randomNumber } from './utils';
+import { checkHookForReturnValue, checkHookForFunction, randomNumber } from './utils';
 import build from './build';
 
 const create = (factory, parameters = {}) => {
@@ -15,6 +15,7 @@ const create = (factory, parameters = {}) => {
   // some extra options to modify the data as they wish. This is the place
   // where they can still add data to the factory.
   if (factory.beforeCreate && !skipHooks) {
+    checkHookForFunction(factory, 'beforeCreate');
     factoryBuild = factory.beforeCreate(factoryBuild);
     checkHookForReturnValue(factoryBuild, 'beforeCreate');
   }
@@ -33,6 +34,7 @@ const create = (factory, parameters = {}) => {
   // the developer so they can use the newly created data and maybe
   // add some extra's here.
   if (factory.afterCreate && !skipHooks) {
+    checkHookForFunction(factory, 'afterCreate');
     factoryBuild = factory.afterCreate(factoryBuild);
     checkHookForReturnValue(factoryBuild, 'afterCreate');
   }

@@ -1,4 +1,4 @@
-import { attributesFor, checkForUnknownAttributes } from '../utils';
+import { attributesFor, checkForUnknownAttributes, checkHookForFunction } from '../utils';
 
 describe('utilities', () => {
   describe('attributesFor', () => {
@@ -41,6 +41,38 @@ describe('utilities', () => {
 
       expect(() => {
         checkForUnknownAttributes(factoryInstance, whitelistedAttributes);
+      }).not.toThrow();
+    });
+  });
+
+  describe('checkHookForFunction', () => {
+    const BaseFactory = {
+      attributes: { firstName: 'testing' },
+    };
+
+    it('throws an exception when the hook is not a function', () => {
+      const factory = {
+        ...BaseFactory,
+        beforeCreate: { lastName: 'resulting in an exception' },
+      };
+
+      const errorMessage =
+        `The beforeCreate is not a function. In order to work with hooks, you should ` +
+        `make the beforeCreate a function.`;
+
+      expect(() => {
+        checkHookForFunction(factory, 'beforeCreate');
+      }).toThrow(errorMessage);
+    });
+
+    it('does not throw an exception when the hook is a function', () => {
+      const factory = {
+        ...BaseFactory,
+        beforeCreate: attributes => ({ ...attributes, lastName: 'no exception' }),
+      };
+
+      expect(() => {
+        checkHookForFunction(factory, 'beforeCreate');
       }).not.toThrow();
     });
   });

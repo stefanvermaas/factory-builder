@@ -69,6 +69,22 @@ export const checkHookForReturnValue = (hookResult, hookName) => {
 };
 
 /**
+ * The `checkHookForFunction` validates whether the hook we want to execute
+ * is actually a function. When it's not a function, we can't update the data
+ * correctly, so we want to enforce the hook to be a function.
+ * @param {Object} factory - The factory we want to build/create
+ * @param {String} hookName - The name of the hook that is being called
+ */
+export const checkHookForFunction = (factory, hookName) => {
+  if (isFunction(factory[hookName])) return;
+
+  throw new Error(
+    `The ${hookName} is not a function. In order to work with hooks, you should ` +
+      `make the ${hookName} a function.`,
+  );
+};
+
+/**
  * The `checkForUnkownAttributes` method checks whether a developer is
  * adding attributes to the factory that are not on the base factory. When
  * this happens, we're raising an error message.
