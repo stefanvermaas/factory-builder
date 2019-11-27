@@ -43,7 +43,7 @@ export const attributesFor = (Factory, as = undefined) => {
     // the `as` param is defined, we want to merge the base attributes with the
     // attributes of the variant.
     if (!as) return baseAttributes;
-    return { baseAttributes, ...factoryInstance.variants[as] };
+    return { ...baseAttributes, ...factoryInstance.variants[as] };
   }
 
   throw new Error(
