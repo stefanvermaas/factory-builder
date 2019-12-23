@@ -1,5 +1,14 @@
 # Factory Builder &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/stefanvermaas/factory-builder/blob/master/LICENSE) [![CircleCI](https://circleci.com/gh/stefanvermaas/factory-builder.svg?style=svg)](https://circleci.com/gh/stefanvermaas/factory-builder) [![NPM Version](https://badge.fury.io/js/factory-builder.svg)](https://badge.fury.io/js/factory-builder) [![downloads](https://img.shields.io/npm/dm/factory-builder.svg?style=flat-square)](https://img.shields.io/npm/dm/factory-builder.svg?style=flat-square) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
+<div align="center">
+  <img
+    height="80"
+    width="80"
+    alt="goat"
+    src="https://raw.githubusercontent.com/stefanvermaas/factory-builder/master/other/factory-builder-hero.png"
+  />
+</div>
+
 Factory Builder is a framework agnostic and scalable fixtures replacement for your test suite. It has a straightforward definition syntax, mimics multiple build strategies (saved instances, unsaved instances and attribute hashes), and it allows you to create multiple factories (variants) for the same instance.
 
 It's heavily inspired by [FactoryBot](https://github.com/thoughtbot/factory_bot/) by [Thoughtbot](https://github.com/thoughtbot).
