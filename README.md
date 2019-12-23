@@ -2,9 +2,7 @@
 
 <div align="center">
   <img
-    height="80"
-    width="80"
-    alt="goat"
+    alt="Factory Builder hero image"
     src="https://raw.githubusercontent.com/stefanvermaas/factory-builder/master/other/factory-builder-hero.png"
   />
 </div>
