@@ -1,3 +1,4 @@
+# Factory Builder
 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/stefanvermaas/factory-builder/blob/master/LICENSE) [![NPM Version](https://badge.fury.io/js/factory-builder.svg)](https://badge.fury.io/js/factory-builder) [![downloads](https://img.shields.io/npm/dm/factory-builder.svg?style=flat-square)](https://img.shields.io/npm/dm/factory-builder.svg?style=flat-square) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
