@@ -25,7 +25,6 @@
     "build:watch": "rollup -c -w",
     "lint": "eslint ./src/**",
     "lint:fix": "yarn run lint --fix",
-    "prepare": "yarn run build",
     "prerelease": "yarn run lint:fix && yarn run test:coverage && yarn run build",
     "release": "npm publish",
     "start": "yarn run build:watch start",
