@@ -2,7 +2,7 @@
 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/stefanvermaas/factory-builder/blob/master/LICENSE) [![NPM Version](https://badge.fury.io/js/factory-builder.svg)](https://badge.fury.io/js/factory-builder) [![downloads](https://img.shields.io/npm/dm/factory-builder.svg?style=flat-square)](https://img.shields.io/npm/dm/factory-builder.svg?style=flat-square) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
-Factory Builder is a framework agnostic and scalable fixtures replacement for your test suite. It has a straightforward definition syntax, mimics multiple build strategies (saved instances, unsaved instances and attribute hashes), and it allows you to create multiple factories (variants) for the same instance.
+Factory Builder is a framework agnostic and scalable fixtures replacement for your test suite. It has a straightforward definition syntax, mimics multiple build strategies (unsaved instances and attribute hashes), and it allows you to create multiple factories (variants) for the same instance.
 
 It's heavily inspired by [FactoryBot](https://github.com/thoughtbot/factory_bot/) by [Thoughtbot](https://github.com/thoughtbot).
 
@@ -46,23 +46,17 @@ export default User;
 ```
 
 ### Consuming factories
-On it's own there is nothing special about factories. They're just plain javascript object that return a specifically styled object. To actually use the factory in your test you can make use of three methods that are provided by Factory Buider; `create`, `build` or `attributesFor`.
+On it's own there is nothing special about factories. They're just plain javascript object that return a specifically styled object. To actually use the factory in your test you can make use of two methods that are provided by Factory Buider; `build` or `attributesFor`.
 
-### Create or building a new factory
-Factory Builder doesn't depend on any database, which makes it easy to quickly run your entire test suite. The `create` method mimicks the create action on a database level. It will create a new factory and it will assign it the `id`, `createdAt` and `updatedAt` properties. The `build` simple creates a new factory, but without the `id`, `createdAt` and `updatedAt` properties.
+### Building a new factory
+Factory Builder doesn't depend on any database, which makes it easy to quickly run your entire test suite. The `build` simple creates a new factory.
 
 ```js
 // ./specs/User.js
-import { create, build } from 'factory-builder';
+import { build } from 'factory-builder';
 import User from './factories/User';
 
 describe('User', () => {
-  it('creates a new user', () => {
-    const user = create(User, { lastName: 'created' });
-    expect(user.lastName).toEqual('created');
-    expect(user.id).not.toBeUndefined();
-  });
-
   it('builds a new user', () => {
     const user = build(User, { lastName: 'build' });
     expect(user.lastName).toEqual('build');
@@ -93,20 +87,15 @@ describe('User', () => {
 });
 ```
 
-### Creating or building multiple factories
-You can also create multiple factories at the same time. For this you can use the `createList` or the `buildList` functions that the Factory Builder package provides.
+### Building multiple factories
+You can also create multiple factories at the same time. For this you can use the `buildList` functions that the Factory Builder package provides.
 
 ```js
 // ./specs/User.js
-import { createList, buildList } from 'factory-builder';
+import { buildList } from 'factory-builder';
 import User from './factories/User';
 
 describe('User', () => {
-  it('creates 5 new users', () => {
-    const users = createList(User, 5, { lastName: 'created' });
-    expect(users.length).toEqual(5);
-  });
-
   it('builds 2 new users', () => {
     const users = buildList(User, 2, { lastName: 'build' });
     expect(users.length).toEqual(2);
@@ -116,32 +105,16 @@ describe('User', () => {
 
 ### Before and After hooks
 It's also possible to use one of the hooks that Factory Builder provides for injecting some code;
-- `beforeCreate` - called before creating a factory
-- `afterCreate` - called right after setting the `id`, `createdAt` and `updatedAt` attributes
-- `beforeBuild` - called before building a factory
+- `beforeBuild` - called before building the factory
 - `afterBuild` - called after building the factory
 
-These methods can be globally defined on your factory or can be passed to the `create` or `build` methods. These hooks enable you to modify or use create data to do whatever you want. The `before*` and `after*` methods should always return an `Object` and they always have one argument; the attributes of the factory.
+These methods can be globally defined on your factory or can be passed to the  `build` method. These hooks enable you to modify or use create data to do whatever you want. The `before*` and `after*` methods should always return an `Object` and they always have one argument; the attributes of the factory.
 
 ```js
 // ./factories/User.js
 const User = {
   attributes: {
     firstName: 'Peter',
-  },
-
-  beforeCreate: (attributes) => {
-    return {
-      ...attributes,
-      lastName: 'Pong',
-    };
-  },
-
-  afterCreate: (attributes) => {
-    return {
-      ...attributes,
-      email: `email-${attributes.id}@email.org`,
-    };
   },
 
   beforeBuild: (attributes) => {
@@ -185,8 +158,8 @@ const User = {
   }
 };
 
-import { create } from 'factory-builder';
-create(User, as: 'admin'); // => { firstName: 'Peter', isClient: false, isAdmin: true };
+import { build } from 'factory-builder';
+build(User, as: 'admin'); // => { firstName: 'Peter', isClient: false, isAdmin: true };
 ```
 
 NOTE: The variant must be a plain object and should be namespaced in your factory
