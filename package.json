@@ -38,6 +38,8 @@
     "@babel/core": "^7.4.5",
     "@babel/plugin-proposal-object-rest-spread": "^7.4.4",
     "@babel/preset-env": "^7.4.5",
+    "@rollup/plugin-commonjs": "*",
+    "@rollup/plugin-node-resolve": "*",
     "babel-jest": "^24.8.0",
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.1.0",
@@ -48,8 +50,6 @@
     "prettier": "1.17.1",
     "rollup": "^1.13.1",
     "rollup-plugin-babel": "^4.3.2",
-    "@rollup/plugin-commonjs": "",
-    "@rollup/plugin-node-resolve": "",
     "rollup-plugin-terser": "^5.0.0"
   }
 }
