@@ -1,4 +1,4 @@
-import babel from 'rollup-plugin-babel';
+import babel from '@rollup/plugin-babel';
 import commonjs from '@rollup/plugin-commonjs';
 import resolve from '@rollup/plugin-node-resolve';
 import { terser } from 'rollup-plugin-terser';
@@ -7,6 +7,9 @@ import pkg from './package.json';
 
 export default {
   input: './index.js',
+
+  external: [/@babel\/runtime/],
+
   output: [
     {
       file: `./dist/${pkg.name}.js`,
@@ -19,10 +22,13 @@ export default {
       sourcemap: true,
     },
   ],
+
   plugins: [
     resolve(),
     babel({
       exclude: 'node_modules/**',
+      babelHelpers: 'runtime',
+      plugins: ['@babel/plugin-transform-runtime']
     }),
     commonjs(),
     terser(),
