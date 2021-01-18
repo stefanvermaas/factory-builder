@@ -51,7 +51,7 @@
     "jest": "^24.8.0",
     "np": "^5.2.1",
     "prettier": "1.17.1",
-    "rollup": "^1.13.1",
+    "rollup": "^2.36.2",
     "rollup-plugin-terser": "^5.0.0"
   }
 }
