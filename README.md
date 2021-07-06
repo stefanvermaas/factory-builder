@@ -103,6 +103,23 @@ describe('User', () => {
 });
 ```
 
+### Building multiple factories with different attributes
+In addition to passing an object with attributes, it's also possible to pass an array to `buildList` in order to use different values for  multiple factories.
+```js
+// ./specs/User.js
+import { buildList } from 'factory-builder';
+import User from './factories/User';
+
+describe('User', () => {
+  it('builds 2 new users with different values', () => {
+    const users = buildList(User, 2, [{ lastName: 'build' }, { lastName: 'something' }]);
+    expect(users.length).toEqual(2);
+    expect(users[0].lastName).toEqual('build');
+    expect(users[1].lastName).toEqual('something');
+  });
+});
+```
+
 ### Before and After hooks
 It's also possible to use one of the hooks that Factory Builder provides for injecting some code;
 - `beforeBuild` - called before building the factory
