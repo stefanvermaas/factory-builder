@@ -1,11 +1,17 @@
+import attributesFor from './attributesFor';
 import {
-  attributesFor,
   checkHookForReturnValue,
   checkForUnknownAttributes,
   isObject,
   checkHookForFunction,
 } from './utils';
 
+/**
+ * Builds a new instance for the Factory.
+ * @param {Object} factory - The Factory to build.
+ * @param {Object} parameters - A list of additional parameters for the build.
+ * @returns {Object} The build Factory instance.
+ */
 const build = (factory, parameters = {}) => {
   const { as, skipHooks, ...attributes } = parameters;
 
@@ -19,7 +25,7 @@ const build = (factory, parameters = {}) => {
   }
 
   // Check whether the given attributes are known to the instance
-  checkForUnknownAttributes(factory, attributes);
+  checkForUnknownAttributes(attributesFor(factory), attributes);
 
   // Let's start building this factory by merging the default attributes
   // of the factory with the given attributes that should override it

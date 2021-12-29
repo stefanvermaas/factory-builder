@@ -1,12 +1,12 @@
+import attributesFor from './attributesFor';
 import build from './build';
 import buildList from './buildList';
-import { attributesFor } from './utils';
 
 const FactoryBuilder = {
+  attributesFor,
   build,
   buildList,
-  attributesFor,
 };
 
 export default FactoryBuilder;
-export { build, buildList, attributesFor };
+export { attributesFor, build, buildList };
