@@ -46,9 +46,15 @@ export default User;
 ```
 
 ### Consuming factories
-On it's own there is nothing special about factories. They're just plain javascript object that return a specifically styled object. To actually use the factory in your test you can make use of two methods that are provided by Factory Buider; `build` or `attributesFor`.
 
-### Building a new factory
+On it's own there is nothing special about factories. They're just plain javascript object that return a specifically styled object. To actually use the factory in your test you can make use of multiple methods that are provided by Factory Buider;
+
+- `build`: builds a single, new factory.
+- `buildList`: builds a given number of factories.
+- `attributesFor`: returns the attributes of a factory.
+
+#### Building a new factory with `build`.
+
 Factory Builder doesn't depend on any database, which makes it easy to quickly run your entire test suite. The `build` simple creates a new factory.
 
 ```js
@@ -65,29 +71,8 @@ describe('User', () => {
 });
 ```
 
-### Quickly grab the attributes
-Want to quickly get all the attributes for a factory (for example to use it as POST data in your tests), you can use the `attributesFor` method. This will return an object with all the attributes of a factory.
+#### Building multiple factories with `buildList`.
 
-```js
-// ./specs/User.js
-import { attributesFor } from 'factory-builder';
-import User from './factories/User';
-
-describe('User', () => {
-  it('sends an API request', () => {
-    const userData = attributesFor(User, { lastName: 'Moses' });
-
-    const response = FakeApi('/some-url', {
-      method: 'POST',
-      body: JSON.stringify(userData),
-    });
-
-    expect(response.lastName).toEqual('Moses');
-  });
-});
-```
-
-### Building multiple factories
 You can also create multiple factories at the same time. For this you can use the `buildList` functions that the Factory Builder package provides.
 
 ```js
@@ -103,8 +88,10 @@ describe('User', () => {
 });
 ```
 
-### Building multiple factories with different attributes
+#### Building multiple factories with different attributes
+
 In addition to passing an object with attributes, it's also possible to pass an array to `buildList` in order to use different values for  multiple factories.
+
 ```js
 // ./specs/User.js
 import { buildList } from 'factory-builder';
@@ -120,12 +107,14 @@ describe('User', () => {
 });
 ```
 
-### Before and After hooks
+### Before and after hooks
+
 It's also possible to use one of the hooks that Factory Builder provides for injecting some code;
+
 - `beforeBuild` - called before building the factory
 - `afterBuild` - called after building the factory
 
-These methods can be globally defined on your factory or can be passed to the  `build` method. These hooks enable you to modify or use create data to do whatever you want. The `before*` and `after*` methods should always return an `Object` and they always have one argument; the attributes of the factory.
+These methods can be globally defined on your factory or can be passed to the  `build` method. These hooks enable you to modify or use create data to do whatever you want. The `before*` and `after*` methods should always return an `Object` and they always have one argument: the attributes of the factory.
 
 ```js
 // ./factories/User.js
@@ -152,10 +141,11 @@ const User = {
 export default User;
 ```
 
+> **NOTE:** It's currently not possible to pass the `beforeBuild` and `afterBuild` to either the `build` or `buildList` method. These hooks should be defined on the `Factory` itself.
+
 ### Using variants
-Variants enable you to define multiple variants of the same base factory. You can
-use the `as` key when you create or build a factory and it will return the variant
-you've defined.
+
+Variants enable you to define multiple variants of the same base factory. You can use the `as` key when you create or build a factory and it will return the variant you've defined.
 
 ```js
 const User = {
@@ -179,27 +169,55 @@ import { build } from 'factory-builder';
 build(User, as: 'admin'); // => { firstName: 'Peter', isClient: false, isAdmin: true };
 ```
 
-NOTE: The variant must be a plain object and should be namespaced in your factory
-under `variants`. The key name will also be the way you pick this specific factory
-variant.
+> **NOTE:** The variant must be a plain object and should be namespaced in your factory under `variants`. The key name will also be the way you pick this specific factory variant.
 
-### Generating data
-Note: You could use a third party library like [fakerjs](https://github.com/marak/Faker.js/) to create fake data for your factories or just define it yourself.
+#### Quickly grab the attributes with `attributesFor`.
+
+Want to quickly get all the attributes for a factory (for example to use it as POST data in your tests), you can use the `attributesFor` method. This will return an object with all the attributes of a factory.
+
+```js
+// ./specs/User.js
+import { attributesFor } from 'factory-builder';
+import User from './factories/User';
+
+describe('User', () => {
+  it('sends an API request', () => {
+    const userData = attributesFor(User, { lastName: 'Moses' });
+
+    const response = FakeApi('/some-url', {
+      method: 'POST',
+      body: JSON.stringify(userData),
+    });
+
+    expect(response.lastName).toEqual('Moses');
+  });
+});
+```
+
+> **NOTE:** The `attributesFor` don't call the `beforeBuild` and `afterBuild` hooks for the factory.
+
+### Generating data (optional)
+
+You could use a third party library like [fakerjs](https://github.com/marak/Faker.js/) to create fake data for your factories or just define it yourself.
 
 ## Issues
+
 _Looking to contribute? Look for the [Good First Issue](https://github.com/stefanvermaas/factory-builder/issues?utf8=✓&q=is%3Aissue+is%3Aopen+sort%3Areactions-%2B1-desc+label%3A"good+first+issue"+) label._
 
 ### 🐛 Bugs
+
 Please file an issue for bugs, missing documentation, or unexpected behavior.
 
 [**See Bugs**](https://github.com/stefanvermaas/factory-builder/issues?q=is%3Aissue+is%3Aopen+label%3Abug+sort%3Acreated-desc)
 
 ### 💡 Feature Requests
+
 Please file an issue to suggest new features. Vote on feature requests by adding
 a 👍. This helps maintainers prioritize what to work on.
 
 [**See Feature Requests**](https://github.com/stefanvermaas/factory-builder/issues?q=is%3Aissue+sort%3Areactions-%2B1-desc+label%3Aenhancement+is%3Aopen)
 
 ### ❓ Questions
+
 For questions related to using the library, please file an issue on GitHub with
 the [Question](https://github.com/stefanvermaas/factory-builder/issues?utf8=✓&q=is%3Aissue+is%3Aopen+sort%3Areactions-%2B1-desc+label%3A"question"+) label.
