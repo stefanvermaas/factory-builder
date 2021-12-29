@@ -45,6 +45,26 @@ const User = {
 export default User;
 ```
 
+#### Lazily evaluate the attributes
+
+Most of the time, defining the `attributes` as a object on the factory will be enough. However, the `attributes` can also be defined as a function. This is useful for when one wants to assign a dynamic value to any of the attributes.
+
+```js
+// ./factories/User.js
+import { v4 as uuid } from 'uuid'; // NOTE: The `uuid` library is not part of Factory Builder.
+
+const User = {
+  attributes: () => ({
+    id: uuid(),
+    firstName: 'Thom',
+    lastName: 'Taylor',
+    email: 'example@example.org',
+  })
+}
+
+export default User;
+```
+
 ### Consuming factories
 
 On it's own there is nothing special about factories. They're just plain javascript object that return a specifically styled object. To actually use the factory in your test you can make use of multiple methods that are provided by Factory Buider;
@@ -170,6 +190,25 @@ build(User, as: 'admin'); // => { firstName: 'Peter', isClient: false, isAdmin: 
 ```
 
 > **NOTE:** The variant must be a plain object and should be namespaced in your factory under `variants`. The key name will also be the way you pick this specific factory variant.
+
+The attributes of a specific variant can also be lazily evaluated. Just like the regular attributes of a Factory. To make use of the lazy evaluation, use a function that returns an object.
+
+```js
+import { v4 as uuid } from 'uuid'; // NOTE: The `uuid` library is not part of Factory Builder.
+
+const User = {
+  attributes: {
+    firstName: 'Peter',
+  },
+
+  variants: {
+    created: () => ({ id: uuid() })
+  }
+};
+
+import { build } from 'factory-builder';
+build(User, as: 'created'); // => { firstName: 'Peter', id: '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d' };
+```
 
 #### Quickly grab the attributes with `attributesFor`.
 

@@ -1,20 +1,6 @@
-import { attributesFor, checkForUnknownAttributes, checkHookForFunction } from '../utils';
+import { checkForUnknownAttributes, checkHookForFunction } from '../utils';
 
 describe('utilities', () => {
-  describe('attributesFor', () => {
-    const Factory = () => ({
-      attributes: { some: 'key' },
-    });
-
-    it('does not raise an exception when the factory is passed without instanciating it', () => {
-      expect(() => attributesFor(Factory)).not.toThrow();
-    });
-
-    it('does not raise an exception when the factory instance is passed', () => {
-      expect(() => attributesFor(new Factory())).not.toThrow();
-    });
-  });
-
   describe('checkForUnknownAttributes', () => {
     const UnknownAttributesFactory = () => ({
       attributes: { some: 'key' },
@@ -32,7 +18,7 @@ describe('utilities', () => {
         `Please add these to the factory to be able to use them and clear this message.`;
 
       expect(() => {
-        checkForUnknownAttributes(factoryInstance, unknownAttributes);
+        checkForUnknownAttributes(factoryInstance.attributes, unknownAttributes);
       }).toThrow(expectedExceptionMessage);
     });
 
@@ -40,7 +26,7 @@ describe('utilities', () => {
       const whitelistedAttributes = { id: 1, createdAt: new Date(), updatedAt: new Date() };
 
       expect(() => {
-        checkForUnknownAttributes(factoryInstance, whitelistedAttributes);
+        checkForUnknownAttributes(factoryInstance.attributes, whitelistedAttributes);
       }).not.toThrow();
     });
   });

@@ -14,43 +14,7 @@ export const isObject = item => typeof item === 'object' && !Array.isArray(item)
  * @returns {Boolean} - The result of the check for a function
  */
 
-const isFunction = item => !!(item && item.constructor && item.call && item.apply);
-
-/**
- * The `attributesFor` is a helper method that retrieves the attributes
- * from a factory instance. If none are found, it raises a helpful error
- * message.
- * @param {Object|Function} Factory - The factory or an instance of the factory
- * @param {String} - The variant for a factory
- * @returns {Object} - The attributes of the factory
- */
-
-export const attributesFor = (Factory, as = undefined) => {
-  // It's possible to pass a instance that is not initiate yet to this method
-  // too. The internal methods will instanciate the, but when you use it directly
-  // it's also possible to use the uninstanciated variant directly.
-  const factoryInstance = isFunction(Factory) ? new Factory() : Factory;
-
-  // Now we will check whether the factory has implemented the `attributes` key
-  // or function. When that is not the case, we will ask the developer to implement this.
-  if (factoryInstance.attributes) {
-    // Get the base attributes for the factory. After this we can check for the variant.
-    const baseAttributes = isObject(factoryInstance.attributes)
-      ? factoryInstance.attributes
-      : factoryInstance.attributes();
-
-    // When the `as` param is undefined, we just return the base attributes. When
-    // the `as` param is defined, we want to merge the base attributes with the
-    // attributes of the variant.
-    if (!as) return baseAttributes;
-    return { ...baseAttributes, ...factoryInstance.variants[as] };
-  }
-
-  throw new Error(
-    'Every factory needs some sensible defaults. So please implement the ' +
-      'attributes method/key on the factory yourself.',
-  );
-};
+export const isFunction = item => !!(item && item.constructor && item.call && item.apply);
 
 /**
  * The `checkHookForReturnValue` double checks whether a before/after hook
@@ -92,8 +56,8 @@ export const checkHookForFunction = (factory, hookName) => {
  * @param {Object} attributes - The attributes that will be added to the factory
  */
 
-export const checkForUnknownAttributes = (factory, attributes) => {
-  const factoryAttributes = Object.keys(attributesFor(factory));
+export const checkForUnknownAttributes = (factoryAttributes, attributes) => {
+  const factoryAttributeKeys = Object.keys(factoryAttributes);
   const whitelistedAttributes = ['id', 'createdAt', 'updatedAt'];
 
   // We check for none existing attributes, because we don't want to assign
@@ -101,7 +65,7 @@ export const checkForUnknownAttributes = (factory, attributes) => {
   // whitelisted attributes to make sure the developer can set these when
   // building or creating a new factory.
   const unknownAttributes = Object.keys(attributes).filter(
-    key => !factoryAttributes.includes(key) && !whitelistedAttributes.includes(key),
+    key => !factoryAttributeKeys.includes(key) && !whitelistedAttributes.includes(key),
   );
 
   // When there are unknown attributes, we raise an error that tells
