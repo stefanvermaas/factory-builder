@@ -233,7 +233,7 @@ describe('User', () => {
 });
 ```
 
-> **NOTE:** The `attributesFor` don't call the `beforeBuild` and `afterBuild` hooks for the factory.
+> **NOTE:** The `attributesFor` doesn't call the `beforeBuild` and `afterBuild` hooks for the factory.
 
 ### Generating data (optional)
 
