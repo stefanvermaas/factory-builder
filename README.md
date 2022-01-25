@@ -186,6 +186,22 @@ variant.
 ### Generating data
 Note: You could use a third party library like [fakerjs](https://github.com/marak/Faker.js/) to create fake data for your factories or just define it yourself.
 
+### Using with a ORM
+If you want to persist your factory built objects in order to test the actual creation in a database, it's possible with `afterBuild`.
+Here is an example with Sequelize where `db` has been defined globally for test purposes. We're calling Sequelize's `create` function with the  object attributes in the `afterBuild` method.
+
+```js
+const user = {
+  attributes: {
+    firstName: 'Thom',
+    lastName: 'Taylor',
+    email: 'example@example.org',
+  },
+
+  afterBuild: async (attributes) => global.db.user.create(attributes),
+};
+```
+
 ## Issues
 _Looking to contribute? Look for the [Good First Issue](https://github.com/stefanvermaas/factory-builder/issues?utf8=✓&q=is%3Aissue+is%3Aopen+sort%3Areactions-%2B1-desc+label%3A"good+first+issue"+) label._
 
