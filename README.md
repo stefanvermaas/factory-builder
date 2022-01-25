@@ -191,7 +191,7 @@ If you want to persist your factory built objects in order to test the actual cr
 Here is an example with Sequelize where `db` has been defined globally for test purposes. We're calling Sequelize's `create` function with the  object attributes in the `afterBuild` method.
 
 ```js
-const user = {
+const User = {
   attributes: {
     firstName: 'Thom',
     lastName: 'Taylor',
@@ -200,6 +200,11 @@ const user = {
 
   afterBuild: async (attributes) => global.db.user.create(attributes),
 };
+```
+Build the factory and await the created database entity and test it.
+```js
+const user = await build(User);
+expect(user.firstName).toEqual('Thom');
 ```
 
 ## Issues
