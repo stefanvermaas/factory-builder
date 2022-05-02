@@ -43,7 +43,7 @@
     "@rollup/plugin-babel": "^5.2.1",
     "@rollup/plugin-commonjs": "*",
     "@rollup/plugin-node-resolve": "*",
-    "babel-jest": "^27.0.2",
+    "babel-jest": "^28.0.3",
     "eslint": "^7.28.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^8.3.0",
