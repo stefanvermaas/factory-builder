@@ -13,6 +13,7 @@ It's heavily inspired by [FactoryBot](https://github.com/thoughtbot/factory_bot/
   - [🐛 Bugs](#-bugs)
   - [💡 Feature Requests](#-feature-requests)
   - [❓ Questions](#-questions)
+  - [🛟 Supported versions](#-supported-nodejs-versions)
 
 ## Installation
 This module is distributed via npm which is bundled with node and should be installed as one of your project's devDependencies:
@@ -281,3 +282,7 @@ a 👍. This helps maintainers prioritize what to work on.
 
 For questions related to using the library, please file an issue on GitHub with
 the [Question](https://github.com/stefanvermaas/factory-builder/issues?utf8=✓&q=is%3Aissue+is%3Aopen+sort%3Areactions-%2B1-desc+label%3A"question"+) label.
+
+### 🛟 Supported NodeJS Versions
+
+NodeJS version `14.x` and up are supported. Older versions of NodeJS aren't explitly supported as they're not part of our CI setup. If you find anything, please let us know.
