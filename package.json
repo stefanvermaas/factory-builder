@@ -1,6 +1,6 @@
 {
   "name": "factory-builder",
-  "version": "3.0.3",
+  "version": "3.0.4",
   "description": "An easy way to create framework agnostic scalable test factories",
   "author": "Stefan Vermaas",
   "keywords": [
